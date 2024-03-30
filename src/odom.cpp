@@ -4,7 +4,7 @@
 #include <nav_msgs/Odometry.h>
 #include <tf/transform_broadcaster.h>
 #include <tf/transform_datatypes.h>
-#include <gazebo_msgs/ModelStates.h> 
+#include <gazebo_msgs/ModelStates.h>
 #include <sensor_msgs/JointState.h>
 #include <iostream>
 
@@ -62,7 +62,7 @@ void cbMyOdom(const sensor_msgs::JointState::ConstPtr& jointstate)
   double wheel_right_joint_pos = jointstate->position[0]; // 右車軸の位置[rad]
   double wheel_left_joint_pos  = jointstate->position[1]; // 左車軸の位置[rad]
 
-   //自分で変更したところ
+  //自分で変更したところ
   double nt, positionr, positionl, positionrb, positionlb, velr, vell, vel, positionx, positiony, s, X, Y, Vx, Vy, W;
   ros::Time wall_now = ros::Time::now();
   

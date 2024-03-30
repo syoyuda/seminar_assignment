@@ -17,15 +17,15 @@
 #define DATA_FILE_PATH "./test_data.txt" //保存データパス設定
 using namespace std; // C++の命令 cout << に必要
 
-/*                       
+/*
   ロボットの移動命令部分
   sampleでは並進速度 = v_vel/回転速度 a_velを事前に設定
 */
 int main(int argc, char **argv)
-{ 
+{
   /* ------------------------------
             初期設定
---------------------------------*/ 
+--------------------------------*/
     ros::init(argc, argv, "my_robot_cont2");
     ros::NodeHandle nh; // 送受信用
     ros::Publisher pub;
@@ -44,7 +44,7 @@ int main(int argc, char **argv)
 
     //ファイル読み込み用
      FILE *fi;
-    /* ファイルのオープン 
+    /* ファイルのオープン
       データ保存場所を設定しておく．
       ここでは /home/home/ubuntu/catkin_ws/の場所に
       testd.txt　の名前で保存
@@ -64,7 +64,7 @@ int main(int argc, char **argv)
        angular_vel = 0; //回転速度[rad/s]
        //ROS_INFO("moveSecond:begin V%d,Q%d", linear_vel, angular_vel);
 
-     /* 計測スタート */    
+     /* 計測スタート */
         ros::WallTime wall_begin = ros::WallTime::now();
          //クラス::壁時計で宣言、変数wall_biginに関数now()の値を代入
   
@@ -87,14 +87,14 @@ int main(int argc, char **argv)
           cout << "start_time %u \n" << f_t << endl;
 
 
-/* ここから制御ループ */          
+/* ここから制御ループ */
       while(ros::ok())
       {
           ros::WallTime wall_now = ros::WallTime::now();//時間計測と更新
           w_t_t = wall_now - wall_begin; //経過時間を現在時刻 - 開始時刻と設定
     /*  --------------------------------------------------
         以下に動作計画用速度式を
-        プログラムする.  
+        プログラムする.
         ifを使用/swichを使用
         参考HP：https://demura.net/education/16287.html
         以下のprogramは一例です．完成版ではありません．
@@ -169,7 +169,7 @@ int main(int argc, char **argv)
       fprintf(fi,"Time data = %u.%u ", w_t_t.sec, w_t_t.nsec);
       fprintf(fi,"V = %f, Q = %f \n", vel.linear.x, vel.angular.z);
       ros::spinOnce();
-       rate.sleep();        // 指定した周期でループするよう寝て待つ 
+       rate.sleep();        // 指定した周期でループするよう寝て待つ
       }
     fclose(fi);
     return 0;
