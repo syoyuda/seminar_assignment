@@ -22,7 +22,7 @@ void cbVel(const geometry_msgs::Twist::ConstPtr& vel) {
 }
 
 
-// /odomトピックから位置posと姿勢poseを表示
+// /odomトピックから位置posと姿勢poseを表示 
 void cbOdom(const nav_msgs::Odometry::ConstPtr& msg)
 {
   ROS_INFO("Seq: %d", msg->header.seq);
