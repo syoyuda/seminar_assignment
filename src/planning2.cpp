@@ -74,14 +74,7 @@ int main(int argc, char **argv)
           vel.angular.z = angular_vel; //回転速度命令
           //時間設定
         
-        ros::WallDuration first_t = ros::WallDuration(2.0);
-        ros::WallDuration second_t = ros::WallDuration(5.0);
-        ros::WallDuration third_t = ros::WallDuration(7.0);
-        ros::WallDuration fourth_t = ros::WallDuration(17.0);
-        ros::WallDuration fifth_t = ros::WallDuration(19.0);
-        ros::WallDuration sixth_t = ros::WallDuration(22.0);
-        ros::WallDuration p_f_t = ros::WallDuration(24.0);
-        
+        ros::WallDuration stop_t = ros::WallDuration(10.0);
         ros::WallDuration f_t = ros::WallDuration(30.0);
 
         cout << "start_time %u \n" << f_t << endl;
@@ -100,62 +93,17 @@ int main(int argc, char **argv)
         以下のprogramは一例です．完成版ではありません．
       ---------------------------------------------------- */
     
-        
-     if (w_t_t < first_t) //0秒から2秒(加速)
+    /*半径1の円運動*/
+     if (w_t_t < stop_t) //0秒から10秒(加速)
     {
         cout << "Time %u" << w_t_t << endl;
         int t_t = w_t_t.sec;//t_tに経過時間の実数値を代入
-          vel.linear.x = 0.1*t_t; //加速の式
-        vel.angular.z = 0.0;
+        vel.linear.x = 2*M_PI*1/10; //加速の式
+        vel.angular.z = 0.2*M_PI;
         cout << "v1\n" << vel.linear.x << endl;
     }
-    else if (first_t <= w_t_t && w_t_t < second_t)//2秒から5秒(定速)
-    {
-            cout << "Time %u" << w_t_t << endl;
-            vel.linear.x = 0.2;
-            vel.angular.z = 0.0;
-            cout << "v2\n" << vel.linear.x << endl;
-    }
-    else if (second_t <= w_t_t && w_t_t < third_t)//5秒から7秒(減速)
-    {
-            cout << "Time %u" << w_t_t << endl;
-            int t_t = w_t_t.sec;
-            vel.linear.x = -0.1*t_t+0.7;
-            vel.angular.z = 0.0;
-            cout << "v2\n" << vel.linear.x << endl;
-    }
-    else if (third_t <= w_t_t && w_t_t < fourth_t)//回転(7~17秒)
-    {
-            int t_t_2 = w_t_t.sec -7;
-            cout << "Time %u" << w_t_t << endl;
-            vel.linear.x = 0.0;
-            vel.angular.z = 0.1*M_PI;
-            cout << "v3\n" << vel.linear.x << endl;
-    }
-       else if (fourth_t <= w_t_t && w_t_t < fifth_t) //17秒から19秒(加速)
-    {
-        cout << "Time %u" << w_t_t << endl;
-        int t_t = w_t_t.sec - 17;//t_tに経過時間の実数値を代入
-          vel.linear.x = 0.1*t_t; //加速の式
-        vel.angular.z = 0.0;
-        cout << "v1\n" << vel.linear.x << endl;
-    }
-    else if (fifth_t <= w_t_t && w_t_t < sixth_t)//19秒から22秒(定速)
-    {
-            cout << "Time %u" << w_t_t << endl;
-            vel.linear.x = 0.2;
-            vel.angular.z = 0.0;
-            cout << "v2\n" << vel.linear.x << endl;
-    }
-    else if (sixth_t <= w_t_t && w_t_t < p_f_t)//22秒から24秒(減速)
-    {
-            cout << "Time %u" << w_t_t << endl;
-            int t_t = w_t_t.sec - 17;
-            vel.linear.x = -0.1*t_t+0.7;
-            vel.angular.z = 0.0;
-            cout << "v2\n" << vel.linear.x << endl;
-    }
-    else if (p_f_t <= w_t_t)
+
+    else if (stop_t <= w_t_t)
     {
         cout << "Time %u" << w_t_t << endl;
             vel.linear.x = 0.0;

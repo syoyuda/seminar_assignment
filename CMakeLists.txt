@@ -7,6 +7,8 @@ project(seminar_assignment)
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
+
+#catkin_LIBRARIESの中身を指定する
 find_package(catkin REQUIRED COMPONENTS
   roscpp
   rospy
@@ -77,7 +79,7 @@ find_package(catkin REQUIRED COMPONENTS
 ## Declare ROS dynamic reconfigure parameters ##
 ################################################
 
-catkin_package()
+
 
 ## To declare and build dynamic reconfigure parameters within this
 ## package, follow these steps:
@@ -106,7 +108,6 @@ catkin_package()
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
 #  INCLUDE_DIRS include
-#  LIBRARIES kadai5
 #  CATKIN_DEPENDS roscpp rospy std_msgs
 #  DEPENDS system_lib
 )
@@ -118,7 +119,7 @@ catkin_package(
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
 include_directories(
-# include
+include
   ${catkin_INCLUDE_DIRS}
 )
 
