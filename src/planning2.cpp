@@ -74,7 +74,7 @@ int main(int argc, char **argv)
           vel.angular.z = angular_vel; //回転速度命令
           //時間設定
         
-        ros::WallDuration stop_t = ros::WallDuration(10.0);
+        ros::WallDuration stop_t = ros::WallDuration(20.0);
         ros::WallDuration f_t = ros::WallDuration(30.0);
 
         cout << "start_time %u \n" << f_t << endl;
@@ -94,16 +94,16 @@ int main(int argc, char **argv)
       ---------------------------------------------------- */
     
     /*半径1の円運動*/
-     if (w_t_t < stop_t) //0秒から10秒(加速)
+     if (w_t_t < stop_t) //0秒から20秒(加速)
     {
         cout << "Time %u" << w_t_t << endl;
         int t_t = w_t_t.sec;//t_tに経過時間の実数値を代入
-        vel.linear.x = 2*M_PI*1/10; //加速の式
-        vel.angular.z = 0.2*M_PI;
+        vel.linear.x = 2*M_PI*1/20; //加速の式
+        vel.angular.z = 0.1*M_PI;
         cout << "v1\n" << vel.linear.x << endl;
     }
 
-    else if (stop_t <= w_t_t)
+    else
     {
         cout << "Time %u" << w_t_t << endl;
             vel.linear.x = 0.0;
