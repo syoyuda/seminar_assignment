@@ -139,10 +139,12 @@ include
 ## The recommended prefix ensures that target names across packages don't collide
 add_executable( planning src/planning )
 add_executable( planning2 src/planning2 )
+add_executable( planning3 src/planning3 )
 add_executable( odom src/odom )
 
 target_link_libraries(planning  ${catkin_LIBRARIES} )
 target_link_libraries(planning2  ${catkin_LIBRARIES} )
+target_link_libraries(planning3  ${catkin_LIBRARIES} )
 target_link_libraries( odom  ${catkin_LIBRARIES} )
 
 
