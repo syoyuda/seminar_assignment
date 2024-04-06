@@ -97,7 +97,7 @@ int main(int argc, char **argv)
     
     /*半径1の円運動*/
 
-    if(w_t_t < stop_t )
+    if(w_t_t <= stop_t )
     {
         cout << "Time %u" << w_t_t << endl;
         int t_t = w_t_t.sec;//t_tに経過時間の実数値を代入
@@ -105,7 +105,7 @@ int main(int argc, char **argv)
         vel.angular.z = 0.1*M_PI;
         cout << "v1\n" << vel.linear.x << endl;
     }
-    else if(stop_t <= w_t_t && w_t_t < change_course_t )
+    else if(stop_t < w_t_t && w_t_t <= change_course_t )
     {
         cout << "Time %u" << w_t_t << endl;
         int t_t = w_t_t.sec;//t_tに経過時間の実数値を代入
@@ -113,7 +113,7 @@ int main(int argc, char **argv)
         vel.angular.z = 0.0;
         cout << "v1\n" << vel.linear.x << endl;
     }
-    else if(change_course_t <= w_t_t && w_t_t < arrival_t)
+    else if(change_course_t < w_t_t && w_t_t < arrival_t)
     {
         cout << "Time %u" << w_t_t << endl;
         int t_t = w_t_t.sec;
