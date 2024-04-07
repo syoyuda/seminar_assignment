@@ -80,9 +80,8 @@ int main(int argc, char **argv)
           ros::WallDuration fourth_t = ros::WallDuration(17.0);
           ros::WallDuration fifth_t = ros::WallDuration(19.0);
           ros::WallDuration sixth_t = ros::WallDuration(22.0);
-          ros::WallDuration p_f_t = ros::WallDuration(24.0);
-          
-          ros::WallDuration f_t = ros::WallDuration(30.0);
+          ros::WallDuration stop_t = ros::WallDuration(24.0);
+          ros::WallDuration f_t = ros::WallDuration(34.0);
 
           cout << "start_time %u \n" << f_t << endl;
 
@@ -147,7 +146,7 @@ int main(int argc, char **argv)
             vel.angular.z = 0.0;
             cout << "v2\n" << vel.linear.x << endl;
       }
-      else if (sixth_t <= w_t_t && w_t_t < p_f_t)//22秒から24秒(減速)
+      else if (sixth_t <= w_t_t && w_t_t < stop_t)//22秒から24秒(減速)
       {
             cout << "Time %u" << w_t_t << endl;
             int t_t = w_t_t.sec - 17;
@@ -155,7 +154,14 @@ int main(int argc, char **argv)
             vel.angular.z = 0.0;
             cout << "v2\n" << vel.linear.x << endl;
       }
-      else if (p_f_t <= w_t_t)
+      else if (stop_t <= w_t_t && w_t_t < f_t) //24秒から34秒まで回転
+      {
+        cout << "Time %u" << w_t_t << endl;
+            vel.linear.x = 0.0;
+            vel.angular.z = 0.1*M_PI;
+            cout << "v2\n" << vel.linear.x << endl;
+      }
+      else if (f_t <= w_t_t)
       {
         cout << "Time %u" << w_t_t << endl;
             vel.linear.x = 0.0;
