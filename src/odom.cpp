@@ -8,19 +8,17 @@
 #include <sensor_msgs/JointState.h>
 #include <iostream>
 
-
-
 using namespace std;
 ros::Publisher G_publisher_odom;
 nav_msgs::Odometry G_odom;
-ros::Time G_wall_begin ;
+ros::Time G_wall_begin;
+
 
 // コールバック関数。並進、回転速度の表示。
 void cbVel(const geometry_msgs::Twist::ConstPtr& vel) {
   cout << "Linear :" << vel->linear.x << endl;
   cout << "Angular:" << vel->angular.z << endl;
 }
-
 
 // /odomトピックから位置posと姿勢poseを表示 
 void cbOdom(const nav_msgs::Odometry::ConstPtr& msg)
@@ -54,40 +52,42 @@ void cbModelStates(const gazebo_msgs::ModelStates::ConstPtr& msg)
               
 }
 
-// cbMyOdom：この関数に自分のオドメトリを実装しよう！
+// cbMyOdom：オドメトリ計算用のコールバック関数を定義
+//車輪の移動量から本体の位置と姿勢を求める
 // /joint_statesトピックから左右のjoint(車輪回転軸)の位置（回転角度)[rad]を表示
 // 参考：Turtlebot3の車輪直径0.066 [m]
 void cbMyOdom(const sensor_msgs::JointState::ConstPtr& jointstate)
 {
+  //中身不明、ここはひな形通り
   double wheel_right_joint_pos = jointstate->position[0]; // 右車軸の位置[rad]
   double wheel_left_joint_pos  = jointstate->position[1]; // 左車軸の位置[rad]
 
-  //自分で変更したところ
+  //以下自作
   double nt, positionr, positionl, positionrb, positionlb, velr, vell, vel, positionx, positiony, s, X, Y, Vx, Vy, W;
   ros::Time wall_now = ros::Time::now();
   
 
-  if(wall_now.toSec() <= 0){
+  if(wall_now.toSec() <= 0){  //初期状態をposition[]にセット？
     positionrb = jointstate->position[0];
     positionlb = jointstate->position[1];
   }else{
+    nt = wall_now.toSec() - G_wall_begin.toSec();  //double型の時間差、現在時刻-開始時刻
 
-    nt = wall_now.toSec() - G_wall_begin.toSec();  // dt
-    positionr = (jointstate->position[0] - positionrb) /nt;  // 右車輪を微分してる　→車輪の回転速度
-    positionl = (jointstate->position[1] - positionlb) /nt;   // 左車輪を微分してる
+    positionr = (jointstate->position[0] - positionrb) /nt;  // 右車輪位置を微分→車輪の回転速度
+    positionl = (jointstate->position[1] - positionlb) /nt;   // 左車輪位置を微分
     
-    velr = positionr * 0.033 ;                   // 回転速度と半径をかけて車輪の進行速度を求めてる
+    velr = positionr * 0.033 ;         //車輪の並進速度を回転速度と半径から算出 v=rω
     vell = positionl * 0.033;
-    vel  = (velr + vell) / 2;                    //  車体の併進速度
+    vel  = (velr + vell) / 2;          //車体の並進速度
 
-    W    = (vell - velr) / 0.158;                    // 車輪の進行速度で車体本体の回転速度を求めてる
+    W    = (vell - velr) / 0.158;      // 車輪の並進速度と車輪間距離から車体本体の回転速度を算出
 
-    s    = W * nt;                               // 車体のθを回転速度を微分して求めてる
+    s    = W * nt;                     // 車体の回転速度と経過時間から変化した角度を求める
 
-    Vx   = vel * sin(s);                         // 車体のx軸の速度に分解してる
+    Vx   = vel * sin(s);               // 車体の並進速度を分解
     Vy   = vel * cos(s);
 
-    X    = Vx * nt;                              // 位置
+    X    = Vx * nt;                    //座標で表した位置を速度*時間で計算
     Y    = Vy * nt;
 
     G_odom.pose.pose.position.x += X;
@@ -97,22 +97,16 @@ void cbMyOdom(const sensor_msgs::JointState::ConstPtr& jointstate)
     G_publisher_odom.publish(G_odom);
   }
     
-    
-
-
-  
-  
-  
-  // 車軸の位置は積算される
-  ROS_INFO("Whell Pos (r:%f, l:%f)", wheel_right_joint_pos,wheel_left_joint_pos);
+ // 車軸の位置は積算される
+  ROS_INFO("Wheel Pos (r:%f, l:%f)", wheel_right_joint_pos,wheel_left_joint_pos);
 }
 
 
 
-
+//通信関係
 int main(int argc, char **argv)
 {
-  ros::init(argc, argv, "my_odom3");
+  ros::init(argc, argv, "odom");
   ros::NodeHandle nh;
 
   //subscriberの作成。トピック/cmd_velを購読する。
